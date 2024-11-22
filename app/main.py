@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Query
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from datetime import datetime, date
 import pymysql
 from dotenv import load_dotenv
@@ -34,7 +34,7 @@ def get_db_connection():
 
 # Pydantic 모델 정의
 class LoginRequest(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 class CustomerResponse(BaseModel):
@@ -84,7 +84,7 @@ async def login(login_request: LoginRequest):
             # 이메일로 고객 정보 조회
             cursor.execute(
                 """
-                SELECT customer_id, name, email, password_hash, created_at
+                SELECT customer_id, name, email, password_hash AS password, created_at
                 FROM customers
                 WHERE email = %s
                 """,
@@ -95,8 +95,8 @@ async def login(login_request: LoginRequest):
             if not customer:
                 raise HTTPException(status_code=404, detail="Invalid email or password")
 
-            # 비밀번호 검증
-            if not verify_password(login_request.password, customer["password_hash"]):
+            # 비밀번호 평문 비교
+            if login_request.password != customer["password"]:
                 raise HTTPException(status_code=401, detail="Invalid email or password")
 
     # 인증 성공 시 고객 정보 반환
@@ -106,6 +106,8 @@ async def login(login_request: LoginRequest):
         email=customer["email"],
         created_at=customer["created_at"]
     )
+
+
 
 # 2. 전체 고객 목록 조회 API
 @app.get("/customers", response_model=List[CustomerResponse])
