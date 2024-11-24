@@ -26,4 +26,9 @@ sudo docker run -d -p 8000:8000 --env-file /home/ubuntu/.env datamasterr/fastapi
 sudo docker images
 sudo docker ps
 sudo docker ps -a
-``` 
+```
+
+## 디버깅
+```bash
+sudo docker logs <container-name>
+```
