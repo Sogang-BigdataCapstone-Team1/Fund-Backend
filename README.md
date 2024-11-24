@@ -17,13 +17,13 @@ docker buildx build --platform linux/amd64 -t datamasterr/fastapi-app:latest . -
 docker buildx build --platform linux/amd64 -t datamasterr/fastapi-app:latest . --push
 ```
 ```bash
-docker buildx build --platform linux/amd64 -t datamasterr/fastapi-app:latest . --load
-docker buildx build --platform linux/amd64 -t datamasterr/fastapi-app:latest . --push
+sudo docker pull datamasterr/fastapi-app:latest
+sudo docker run -d -p 8000:8000 --env-file /home/ubuntu/.env datamasterr/fastapi-app:latest
 ``` 
 
 ## 실행
 ```bash
-ollama serve
-ollama pull qwen2.5:1.5b
-streamlit run app.py
+sudo docker images
+sudo docker ps
+sudo docker ps -a
 ``` 
