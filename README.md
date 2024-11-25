@@ -32,3 +32,10 @@ sudo docker ps -a
 ```bash
 sudo docker logs <container-name>
 ```
+
+## 중지되도 다시 시작될 수 있도록
+```bash
+docker stop <container_id>
+docker update --restart unless-stopped <container_id>
+docker start <container_id>
+```
